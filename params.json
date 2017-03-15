@@ -1,6 +1,0 @@
-{
-  "name": "Time-Space Diagram Generator",
-  "tagline": "The main objective of this work is create an easy way to draw time space diagrams using SVG and JS.",
-  "body": "### Welcome the Time Space Diagram Generator project.\r\nDistributed systems are notoriously hard to write and understand. Tools that enable visualizing the distributed computation are therefore a valuable tool in this field.\r\n\r\nThe main objective of this work is to develop a framework for tools to visualize distributed computations. The proof-of-concept tool shall build animated time-space (or space-time) diagrams for distributed computation traces.\r\n\r\nThe framework primarily uses SVG and JS to build the visualization. To experiment it out, download the project using one of the buttons above and open the index.html file in your browser. Soon we will have the project running online too.\r\n\r\nCheers",
-  "note": "Don't delete this file! It's used internally to help with page regeneration."
-}

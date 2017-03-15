@@ -1,0 +1,8 @@
+title: Time-Space Diagram Generator
+description: The main objective of this work is create an easy way to draw time space diagrams using SVG and JS.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
