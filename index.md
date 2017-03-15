@@ -7,13 +7,13 @@ The main objective of this work is to develop a framework for tools to visualize
 For a live demo, go here http://pluxos.github.io/dis-sys-vis/live/index.html
 
 
-## Instalation and Compilation
+## Download and Compilation
 If you would rather run the tool directly from your own box, the following steps should be followed:
 
 1. Download and install node.js following the steps from https://nodejs.org/en/download/
 2. Download and install Browserify: `npm install -g browserify`
 3. Download DSVis: `git clone git@github.com:pluxos/dis-sys-vis.git` or dowload the zip from http://pluxos.github.io/dis-sys-vis/
-4. cd to folder ?
+4. cd to the projectś folder
 5. Install dependencies: `npm install`
 6. Build the library without minification: `make clean debug` Resulting file is called `vsdis.js`
 7. Build the library with minification: `make clean all` Resulting file is called `vsdis-min.js`
