@@ -1,4 +1,4 @@
-#Distributed Systems' traces Visualization Tool
+# Distributed Systems' traces Visualization Tool
 
 Distributed systems are notoriously hard to write and understand. Tools that enable visualizing the distributed computation are therefore a valuable tool in this field.
 
