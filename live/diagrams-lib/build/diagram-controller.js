@@ -116,10 +116,10 @@ Diagram.translate = function(s) {
 }
 
 Diagram.MESSAGETYPE = {
-  FULL_SUCCESS: 'FULL-SUCCESS',
-  HALF_SUCCESS: 'HALF-SUCCESS',
-  FULL_ERROR: 'FULL-ERROR',
-  HALF_ERROR: 'HALF-ERROR'
+  CONTINOUS_SUCCESS: 'CONTINOUS_SUCCESS',
+  DOTTED_SUCCESS: 'DOTTED_SUCCESS',
+  CONTINOUS_ERROR: 'CONTINOUS_ERROR',
+  DOTTED_ERROR: 'DOTTED_ERROR'
 };
 
 Diagram.TYPE = {
@@ -205,8 +205,8 @@ var grammar = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[5,8,15],$V1=[1,9],$V2=[1,11],$V3=[1,13];
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"start":3,"document":4,"EOF":5,"line":6,"statement":7,"NL":8,"entry":9,"actor":10,"event":11,"time":12,"messagetype":13,"msg":14,"ACTOR":15,"FULL_SUCCESS":16,"HALF_SUCCESS":17,"FULL_ERROR":18,"HALF_ERROR":19,"EVENT":20,"TIME":21,"MESSAGE":22,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"NL",15:"ACTOR",16:"FULL_SUCCESS",17:"HALF_SUCCESS",18:"FULL_ERROR",19:"HALF_ERROR",20:"EVENT",21:"TIME",22:"MESSAGE"},
+symbols_: {"error":2,"start":3,"document":4,"EOF":5,"line":6,"statement":7,"NL":8,"entry":9,"actor":10,"event":11,"time":12,"messagetype":13,"msg":14,"ACTOR":15,"CONTINOUS_SUCCESS":16,"DOTTED_SUCCESS":17,"CONTINOUS_ERROR":18,"DOTTED_ERROR":19,"EVENT":20,"TIME":21,"MESSAGE":22,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"NL",15:"ACTOR",16:"CONTINOUS_SUCCESS",17:"DOTTED_SUCCESS",18:"CONTINOUS_ERROR",19:"DOTTED_ERROR",20:"EVENT",21:"TIME",22:"MESSAGE"},
 productions_: [0,[3,2],[4,0],[4,2],[6,1],[6,1],[7,1],[9,8],[10,1],[13,1],[13,1],[13,1],[13,1],[11,1],[12,1],[14,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
@@ -229,16 +229,16 @@ case 8:
  this.$ = yy.parser.yy.getActor($$[$0]); 
 break;
 case 9:
- this.$ = Diagram.MESSAGETYPE.FULL_SUCCESS; 
+ this.$ = Diagram.MESSAGETYPE.CONTINOUS_SUCCESS; 
 break;
 case 10:
- this.$ = Diagram.MESSAGETYPE.HALF_SUCCESS; 
+ this.$ = Diagram.MESSAGETYPE.DOTTED_SUCCESS; 
 break;
 case 11:
- this.$ = Diagram.MESSAGETYPE.FULL_ERROR; 
+ this.$ = Diagram.MESSAGETYPE.CONTINOUS_ERROR; 
 break;
 case 12:
- this.$ = Diagram.MESSAGETYPE.HALF_ERROR; 
+ this.$ = Diagram.MESSAGETYPE.DOTTED_ERROR; 
 break;
 case 13:
  

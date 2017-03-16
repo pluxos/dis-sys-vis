@@ -8,10 +8,10 @@
 
 [\r\n]+                                      return 'NL';
 \#[^\r\n]*                                   /* skip comments */
-"-->"                                        return 'FULL_SUCCESS';
-"..>"                                        return 'HALF_SUCCESS';
-^(\-\-x)                                     return 'FULL_ERROR';
-^(\.\.x)                                     return 'HALF_ERROR';
+"-->"                                        return 'CONTINOUS_SUCCESS';
+"..>"                                        return 'DOTTED_SUCCESS';
+^(\-\-x)                                     return 'CONTINOUS_ERROR';
+^(\.\.x)                                     return 'DOTTED_ERROR';
 (?!\s)([^\->:,\r\n"]+?)(?=\s)                return 'ACTOR';
 (?=\s)([^\->:\.\r\n"]+)(?=\s)                return 'EVENT';
 "null"                                       return 'EVENT';
@@ -56,10 +56,10 @@ actor
 	;
 
 messagetype
-	: FULL_SUCCESS  { $$ = Diagram.MESSAGETYPE.FULL_SUCCESS; }
-	| HALF_SUCCESS  { $$ = Diagram.MESSAGETYPE.HALF_SUCCESS; }
-	| FULL_ERROR    { $$ = Diagram.MESSAGETYPE.FULL_ERROR; }
-	| HALF_ERROR    { $$ = Diagram.MESSAGETYPE.HALF_ERROR; }
+	: CONTINOUS_SUCCESS  { $$ = Diagram.MESSAGETYPE.CONTINOUS_SUCCESS; }
+	| DOTTED_SUCCESS     { $$ = Diagram.MESSAGETYPE.DOTTED_SUCCESS; }
+	| CONTINOUS_ERROR    { $$ = Diagram.MESSAGETYPE.CONTINOUS_ERROR; }
+	| DOTTED_ERROR       { $$ = Diagram.MESSAGETYPE.DOTTED_ERROR; }
 	;
 
 event
