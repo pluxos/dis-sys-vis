@@ -232,7 +232,7 @@
         var lengthLine2 = line2.getTotalLength() - 8;
 
 
-        if (parsedElements[0].getMessageType() == 'HALF-ERROR' || parsedElements[0].getMessageType() == 'HALF-SUCCESS') {
+        if (parsedElements[0].getMessageType() == 'CONTINOUS_ERROR' || parsedElements[0].getMessageType() == 'DOTTED_ERROR') {
           //half of a path
           line2.attr({ visibility: "hidden" });
           var subPath = paper.path(Snap.path.getSubpath(line2, 0, (line2.getTotalLength() - 8)/2));
@@ -289,7 +289,7 @@
        }, animateValue, mina.easeinout);
 
 
-        if (status == 'HALF-ERROR' || status == 'FULL-ERROR') {
+        if (status == 'DOTTED_SUCCESS' || status == 'DOTTED_ERROR') {
           lengthLine2 = '3,3';
         }
 
