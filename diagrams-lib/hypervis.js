@@ -1,5 +1,5 @@
 /** The following is included by preprocessor */
-// #include "jit.js"
+// #include "libs/jit.js"
 
 function Hypervis(inputId, refreshId, root) {
     this.inputId   = inputId;

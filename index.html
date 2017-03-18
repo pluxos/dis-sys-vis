@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/jquery-linedtextarea.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 	<script src="js/jquery-linedtextarea.js"></script>
-	<script type="text/javascript" src="diagrams-lib/dist/vsdis-min.js"></script>
+	<script type="text/javascript" src="diagrams-lib/dist/vsdis.js"></script>
 	<script type="text/javascript" src="js/saveSvgAsPng.js"></script>
 	<script type="text/javascript" src="js/scripts.js"></script>
 </head>
@@ -25,6 +25,7 @@
 					<strong>Choose the visualization: </strong>
 					<span><input type="radio" value="timespace" name="viz" checked />Time Space</span>
 					<span><input type="radio" value="hypertree" name="viz"/>Hypertree</span>
+					<span><input type="radio" value="chord" name="viz"/>Chord</span>
 				</form>
 			</div>
 			<div class="options">
@@ -59,7 +60,7 @@ D p13 85..>C p14 95:lost request --color #FF8D00</textarea>
 		</div>
 		<div class="content">
 			<div class="inner">
-				<svg id="paper" width="100%" height="100%"></svg>
+				<svg id="paper" width="960" height="960"></svg>
 				<div id="infovis"></div>
 			</div>
 		</div>

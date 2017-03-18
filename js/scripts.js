@@ -1,6 +1,7 @@
 VIZ_TYPE = {
 	TIMESPACE: "timespace",
-	HYPERTREE: "hypertree"
+	HYPERTREE: "hypertree",
+	CHORD: "chord"
 };
 
 function getOptionsSelectedValues()
@@ -21,15 +22,19 @@ function drawElements() {
 	var selectedViz = $("input[name=viz]:checked").val();
 
 	try {
+		document.getElementById("err").style.display = "none";
 		var diagram = model.Diagram.parse(document.getElementById('input-data').value);
 		var vw;
-		if(selectedViz === VIZ_TYPE.TIMESPACE) {		
+		if(selectedViz === VIZ_TYPE.TIMESPACE) {
 			$("#paper").show();
-			document.getElementById("err").style.display = "none";
 			vw = new view.SpaceTimeDraw('#paper', 2, 'black', diagram.entries, getOptionsSelectedValues());		
 		} else if (selectedViz === VIZ_TYPE.HYPERTREE) {
 			$("#infovis").show();
 			vw = new view.Hypervis('input-data', 'draw');
+
+		} else if(selectedViz === VIZ_TYPE.CHORD) {
+			$("#paper").show();
+			vw = new view.ChordDiagram();
 		} else {
 			var errElement = document.getElementById("err");
 			errElement.innerText = "Visualization not supported";
