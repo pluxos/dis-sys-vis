@@ -12,11 +12,11 @@ function Diagram() {
   //stores how many times a node links to another node. Useful when some visualization needs this info
   this.nodesLinkage = [];
 
-  this.containsObject = function(obj, list) {
+  this.containsObject = function(obj, propertyName, list) {
     if(!list) return -1;
     var i;
     for (i = 0; i < list.length; i++) {
-      if (list[i].getSource() === obj) {
+      if (list[i][propertyName] === obj) {
         return i;
       }
     }
@@ -26,16 +26,16 @@ function Diagram() {
 
 //fulfils nodesLinkage array
 Diagram.prototype.link = function(entry) {
-    var index = this.containsObject(entry.getSenderName(), this.nodesLinkage);
+  var index = this.containsObject(entry.getSenderName(), '_source', this.nodesLinkage);
 
-    if(index == -1) {
-      var node = new Diagram.Node(entry.getSenderName());
-      node.addDest(entry.getReceiverName());
-      this.nodesLinkage.push(node);
-    } else {
-      var node = this.nodesLinkage[index];
-      node.addDest(entry.getReceiverName());
-    }
+  if(index == -1) {
+    var node = new Diagram.Node(entry.getSenderName());
+    node.addDest(entry.getReceiverName());
+    this.nodesLinkage.push(node);
+  } else {
+    var node = this.nodesLinkage[index];
+    node.addDest(entry.getReceiverName());
+  }
 };
 
 Diagram.prototype.getActor = function(name) {
@@ -854,14 +854,19 @@ Diagram.parse = function(input) {
 
 Diagram.Node = function(source) {
   this._source = source;
-  this._targets = {};
+  this._targets = [];
+  this.containsObject = new Diagram().containsObject;
 
   this.addDest = function(target) {
-    if(this._targets.hasOwnProperty(target)) {
-      this._targets[target] += 1;
+    var index = this.containsObject(target, 'target', this._targets);
+    if(index == -1) {
+      var obj = {};
+      obj.target = target;
+      obj.count  = 1;
+      this._targets.push(obj);
     } else {
-      this._targets[target] = 1;
-    }
+      this._targets[index].count += 1;
+    } 
   }
 
   this.getTargets = function() {
@@ -18237,28 +18242,80 @@ var d3 = require('d3');
 function ChordDiagram() {
 	this.matrix = [];
 
-	this.createMatrix = function(nodesLinkage) {
+	this.createMatrix = function(nodesLinkage, matrixOrder) {
+		var compareStrings = function(a,b) {
+			a = a.toLowerCase();
+			b = b.toLowerCase();
+
+			return (a < b) ? -1 : (a > b) ? 1 : 0;
+		}
+
+		var initializeArray = function(length) {
+			var arr = [];
+			for(var i = 0; i < length; i++) {
+				arr.push(0);
+			}
+			return arr;
+		}
+
+		var normalizeMatrix = function(matrix) {
+			//complete rows with 0 until its length gets equals to matrix order
+			for(var i = 0; i < matrix.length; i++) {
+				var rowLength = matrix[i].length;
+				if(rowLength != matrixOrder) {
+					for(rowLength; rowLength < matrixOrder; rowLength++) {
+						matrix[i][rowLength] = 0;
+					}
+				}
+			}
+
+			//add new rows if matrix length its not equals to matrix order
+			if(matrix.length != matrixOrder) {
+				matrixLength = matrix.length;
+				for(matrixLength; matrixLength < matrixOrder; matrixLength++) {
+					var row = initializeArray(matrixOrder);
+					matrix[matrixLength] = row;
+				}
+			}
+		}
+
+		//sort target nodes alphabetically
+		for(var i = 0; i < nodesLinkage.length; i++) {
+			nodesLinkage[i].getTargets().sort(function(a,b) {
+				return compareStrings(a.target,b.target);
+			});
+		}
+
+		var index = 0;
 		var matrix = nodesLinkage.map(function(e) {
-			var numberMessages = []; 
-			for(var key in e.getTargets()) { 
-				numberMessages.push(e.getTargets()[key]); 
-			} 
+			var numberMessages = [];//initializeArray(matrixOrder);
+			var targets = e.getTargets();
+			numberMessages[index] = 0;
+			var aux = 0;
+			for(var i = 0; i < targets.length; i++) {
+				if(numberMessages[i] == 0) {
+					numberMessages[++aux] = targets[i].count;
+					continue;
+				}
+				numberMessages[aux++] = targets[i].count;
+			}
+			index++;
 			return numberMessages;
 		});
-
+		normalizeMatrix(matrix);
 		return matrix;
 	}
 
 	this.displayDiagram = function(diagram) {
-		//var matrix = this.createMatrix(diagram.nodesLinkage);
+		var matrix = this.createMatrix(diagram.nodesLinkage, diagram.actors.length);
 		
-		var matrix = [
+		/*var matrix = [
 		[0, 5, 7, 2, 0],
 		[5, 0, 3, 4, 1],
 		[7, 3, 0, 6, 3],
 		[2, 4, 6, 0, 8],
 		[0, 1, 3, 8, 0]
-		];
+		];*/
 
 		var svg = d3.select("svg"),
 		width = +svg.attr("width"),

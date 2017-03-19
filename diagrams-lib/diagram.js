@@ -4,11 +4,11 @@ function Diagram() {
   //stores how many times a node links to another node. Useful when some visualization needs this info
   this.nodesLinkage = [];
 
-  this.containsObject = function(obj, list) {
+  this.containsObject = function(obj, propertyName, list) {
     if(!list) return -1;
     var i;
     for (i = 0; i < list.length; i++) {
-      if (list[i].getSource() === obj) {
+      if (list[i][propertyName] === obj) {
         return i;
       }
     }
@@ -18,16 +18,16 @@ function Diagram() {
 
 //fulfils nodesLinkage array
 Diagram.prototype.link = function(entry) {
-    var index = this.containsObject(entry.getSenderName(), this.nodesLinkage);
+  var index = this.containsObject(entry.getSenderName(), '_source', this.nodesLinkage);
 
-    if(index == -1) {
-      var node = new Diagram.Node(entry.getSenderName());
-      node.addDest(entry.getReceiverName());
-      this.nodesLinkage.push(node);
-    } else {
-      var node = this.nodesLinkage[index];
-      node.addDest(entry.getReceiverName());
-    }
+  if(index == -1) {
+    var node = new Diagram.Node(entry.getSenderName());
+    node.addDest(entry.getReceiverName());
+    this.nodesLinkage.push(node);
+  } else {
+    var node = this.nodesLinkage[index];
+    node.addDest(entry.getReceiverName());
+  }
 };
 
 Diagram.prototype.getActor = function(name) {
@@ -173,14 +173,19 @@ Diagram.parse = function(input) {
 
 Diagram.Node = function(source) {
   this._source = source;
-  this._targets = {};
+  this._targets = [];
+  this.containsObject = new Diagram().containsObject;
 
   this.addDest = function(target) {
-    if(this._targets.hasOwnProperty(target)) {
-      this._targets[target] += 1;
+    var index = this.containsObject(target, 'target', this._targets);
+    if(index == -1) {
+      var obj = {};
+      obj.target = target;
+      obj.count  = 1;
+      this._targets.push(obj);
     } else {
-      this._targets[target] = 1;
-    }
+      this._targets[index].count += 1;
+    } 
   }
 
   this.getTargets = function() {

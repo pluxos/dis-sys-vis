@@ -5,28 +5,80 @@ var d3 = require('d3');
 function ChordDiagram() {
 	this.matrix = [];
 
-	this.createMatrix = function(nodesLinkage) {
+	this.createMatrix = function(nodesLinkage, matrixOrder) {
+		var compareStrings = function(a,b) {
+			a = a.toLowerCase();
+			b = b.toLowerCase();
+
+			return (a < b) ? -1 : (a > b) ? 1 : 0;
+		}
+
+		var initializeArray = function(length) {
+			var arr = [];
+			for(var i = 0; i < length; i++) {
+				arr.push(0);
+			}
+			return arr;
+		}
+
+		var normalizeMatrix = function(matrix) {
+			//complete rows with 0 until its length gets equals to matrix order
+			for(var i = 0; i < matrix.length; i++) {
+				var rowLength = matrix[i].length;
+				if(rowLength != matrixOrder) {
+					for(rowLength; rowLength < matrixOrder; rowLength++) {
+						matrix[i][rowLength] = 0;
+					}
+				}
+			}
+
+			//add new rows if matrix length its not equals to matrix order
+			if(matrix.length != matrixOrder) {
+				matrixLength = matrix.length;
+				for(matrixLength; matrixLength < matrixOrder; matrixLength++) {
+					var row = initializeArray(matrixOrder);
+					matrix[matrixLength] = row;
+				}
+			}
+		}
+
+		//sort target nodes alphabetically
+		for(var i = 0; i < nodesLinkage.length; i++) {
+			nodesLinkage[i].getTargets().sort(function(a,b) {
+				return compareStrings(a.target,b.target);
+			});
+		}
+
+		var index = 0;
 		var matrix = nodesLinkage.map(function(e) {
-			var numberMessages = []; 
-			for(var key in e.getTargets()) { 
-				numberMessages.push(e.getTargets()[key]); 
-			} 
+			var numberMessages = [];//initializeArray(matrixOrder);
+			var targets = e.getTargets();
+			numberMessages[index] = 0;
+			var aux = 0;
+			for(var i = 0; i < targets.length; i++) {
+				if(numberMessages[i] == 0) {
+					numberMessages[++aux] = targets[i].count;
+					continue;
+				}
+				numberMessages[aux++] = targets[i].count;
+			}
+			index++;
 			return numberMessages;
 		});
-
+		normalizeMatrix(matrix);
 		return matrix;
 	}
 
 	this.displayDiagram = function(diagram) {
-		//var matrix = this.createMatrix(diagram.nodesLinkage);
+		var matrix = this.createMatrix(diagram.nodesLinkage, diagram.actors.length);
 		
-		var matrix = [
+		/*var matrix = [
 		[0, 5, 7, 2, 0],
 		[5, 0, 3, 4, 1],
 		[7, 3, 0, 6, 3],
 		[2, 4, 6, 0, 8],
 		[0, 1, 3, 8, 0]
-		];
+		];*/
 
 		var svg = d3.select("svg"),
 		width = +svg.attr("width"),
