@@ -18242,7 +18242,9 @@ var d3 = require('d3');
 function ChordDiagram() {
 	this.matrix = [];
 
-	this.createMatrix = function(nodesLinkage, matrixOrder) {
+	this.createMatrix = function(nodesLinkage, nodes) {
+		var matrixOrder = nodes.length;
+
 		var compareStrings = function(a,b) {
 			a = a.toLowerCase();
 			b = b.toLowerCase();
@@ -18259,16 +18261,6 @@ function ChordDiagram() {
 		}
 
 		var normalizeMatrix = function(matrix) {
-			//complete rows with 0 until its length gets equals to matrix order
-			for(var i = 0; i < matrix.length; i++) {
-				var rowLength = matrix[i].length;
-				if(rowLength != matrixOrder) {
-					for(rowLength; rowLength < matrixOrder; rowLength++) {
-						matrix[i][rowLength] = 0;
-					}
-				}
-			}
-
 			//add new rows if matrix length its not equals to matrix order
 			if(matrix.length != matrixOrder) {
 				matrixLength = matrix.length;
@@ -18286,20 +18278,19 @@ function ChordDiagram() {
 			});
 		}
 
-		var index = 0;
 		var matrix = nodesLinkage.map(function(e) {
-			var numberMessages = [];//initializeArray(matrixOrder);
+			var numberMessages = initializeArray(matrixOrder);
+			var source = e.getSource();
+			var sourceIndex = nodes.indexOf(source);
+			numberMessages[sourceIndex] = 0;
 			var targets = e.getTargets();
-			numberMessages[index] = 0;
-			var aux = 0;
 			for(var i = 0; i < targets.length; i++) {
-				if(numberMessages[i] == 0) {
-					numberMessages[++aux] = targets[i].count;
-					continue;
+				var targetIndex = nodes.indexOf(targets[i].target);
+				if(targetIndex != -1) {
+					numberMessages[targetIndex] = targets[i].count;
 				}
-				numberMessages[aux++] = targets[i].count;
 			}
-			index++;
+
 			return numberMessages;
 		});
 		normalizeMatrix(matrix);
@@ -18307,21 +18298,23 @@ function ChordDiagram() {
 	}
 
 	this.displayDiagram = function(diagram) {
-		var matrix = this.createMatrix(diagram.nodesLinkage, diagram.actors.length);
-		
-		/*var matrix = [
-		[0, 5, 7, 2, 0],
-		[5, 0, 3, 4, 1],
-		[7, 3, 0, 6, 3],
-		[2, 4, 6, 0, 8],
-		[0, 1, 3, 8, 0]
-		];*/
+		var getRandomColor = function() {
+			var letters = '0123456789ABCDEF';
+			var color = '#';
+			for (var i = 0; i < 6; i++ ) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+			return color;
+		};
 
+		var matrix = this.createMatrix(diagram.nodesLinkage, diagram.actors);
 		var svg = d3.select("svg"),
 		width = +svg.attr("width"),
 		height = +svg.attr("height"),
-		outerRadius = Math.min(width, height) * 0.5 - 40,
-		innerRadius = outerRadius - 30;
+		//outerRadius = Math.min(width, height) * 0.5 - 40,
+		//innerRadius = outerRadius - 30;
+		innerRadius = Math.min(width, height) * .41;
+		outerRadius = innerRadius * 1.1;
 
 		var formatValue = d3.formatPrefix(",.0", 1e3);
 
@@ -18336,11 +18329,18 @@ function ChordDiagram() {
 		var ribbon = d3.ribbon()
 		.radius(innerRadius);
 
+		var colorArr = (function() {
+			var arr = [];
+			for(var i = 0; i < diagram.nodesLinkage.length; i++) {
+				arr.push(getRandomColor());
+			}
+			
+			return arr;
+		}());
+
 		var color = d3.scaleOrdinal()
 		.domain(d3.range(diagram.nodesLinkage.length))
-		.range(function() {
-			return diagram.nodesLinkage.map("#000000");
-		});
+		.range(colorArr);
 
 		var g = svg.append("g")
 		.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
@@ -18355,25 +18355,7 @@ function ChordDiagram() {
 		group.append("path")
 		.style("fill", function(d) { return color(d.index); })
 		.style("stroke", function(d) { return d3.rgb(color(d.index)).darker(); })
-		.attr("d", arc);
-
-		var groupTick = group.selectAll(".group-tick")
-		.data(function(d) { return groupTicks(d, 1e3); })
-		.enter().append("g")
-		.attr("class", "group-tick")
-		.attr("transform", function(d) { return "rotate(" + (d.angle * 180 / Math.PI - 90) + ") translate(" + outerRadius + ",0)"; });
-
-		groupTick.append("line")
-		.attr("x2", 6);
-
-		groupTick
-		.filter(function(d) { return d.value % 5e3 === 0; })
-		.append("text")
-		.attr("x", 8)
-		.attr("dy", ".35em")
-		.attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180) translate(-16)" : null; })
-		.style("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
-		.text(function(d) { return formatValue(d.value); });
+		.attr("d", arc);		
 
 		g.append("g")
 		.attr("class", "ribbons")
@@ -18384,13 +18366,35 @@ function ChordDiagram() {
 		.style("fill", function(d) { return color(d.target.index); })
 		.style("stroke", function(d) { return d3.rgb(color(d.target.index)).darker(); });
 
-		// Returns an array of tick angles and values for a given group and step.
-		function groupTicks(d, step) {
-			var k = (d.endAngle - d.startAngle) / d.value;
-			return d3.range(0, d.value, step).map(function(value) {
-				return {value: value, angle: value * k + d.startAngle};
-			});
-		}
+		var key = 1000;
+		g.selectAll(".group")
+		.data(chord(matrix).groups, function(d) { return key++; })
+		.enter()
+		.append("text")
+		.each(function(d) {
+			d.angle = (d.startAngle + d.endAngle) / 2; 
+		})
+		.attr("dy", ".35em")
+		.attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+		.attr("transform", function(d) {
+			return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+			+ "translate(" + ((height / 2) - 10) + ")"
+			+ (d.angle > Math.PI ? "rotate(180)" : "");
+		})
+		.text(function(d) { return diagram.actors[d.index]; })
+		.on("mouseover", fade(.1))
+		.on("mouseout", fade(1));
+
+		function fade(opacity) {
+			return function(g, i) {
+				svg.selectAll("g.ribbons path")
+				.filter(function(d) {
+					return d.source.index != i && d.target.index != i;
+				})
+				.transition()
+				.style("opacity", opacity);
+			};
+		}		
 	}
 }
 },{"d3":6}],3:[function(require,module,exports){
