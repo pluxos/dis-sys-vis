@@ -6,6 +6,8 @@ The main objective of this work is to develop a framework for tools to visualize
 ## Live Demo
 For a live demo, go to [http://pluxos.github.io/dis-sys-vis/live/index.html](http://pluxos.github.io/dis-sys-vis/live/index.html)
 
+## Examples
+
 
 ## Download and Compilation
 If you would rather run the tool directly from your own box, the following steps should be followed:
