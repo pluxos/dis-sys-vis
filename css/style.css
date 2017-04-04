@@ -28,7 +28,7 @@ body { font-family: 'Ubuntu Condensed', sans-serif;  }
 /*CONTENT*/
 .content {}
 .content .inner { text-align: center; overflow: scroll; clear: both; }
-.content .inner svg { padding-top: 20px; }
+.content .inner #chord { display: inline-block; padding-top: 20px; }
 .content .inner #paper { display: inline-block;  }
 .content .inner #infovis { width:600px; height:600px; margin:auto; overflow:hidden; }
 

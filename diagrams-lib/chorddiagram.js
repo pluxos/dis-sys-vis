@@ -71,7 +71,7 @@ function ChordDiagram() {
 		};
 
 		var matrix = this.createMatrix(diagram.nodesLinkage, diagram.actors);
-		var svg = d3.select("svg"),
+		var svg = d3.select("#chord"),
 		width = +svg.attr("width"),
 		height = +svg.attr("height"),
 		//outerRadius = Math.min(width, height) * 0.5 - 40,

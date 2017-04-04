@@ -15,6 +15,8 @@ function resetElements() {
 	$("#paper").hide();
 	$("#infovis").empty();
 	$("#infovis").hide();
+	$("#chord").empty();
+	$("#chord").hide();
 }
 
 function drawElements() {
@@ -33,7 +35,7 @@ function drawElements() {
 			vw = new view.Hypervis('input-data', 'draw');
 
 		} else if(selectedViz === VIZ_TYPE.CHORD) {
-			$("#paper").show();
+			$("#chord").show();
 			vw = new view.ChordDiagram();
 		} else {
 			var errElement = document.getElementById("err");

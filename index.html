@@ -23,9 +23,9 @@
 			<div class="vis">
 				<form id="vis-form">
 					<strong>Choose the visualization: </strong>
-					<span><input type="radio" value="timespace" name="viz" />Time Space</span>
+					<span><input type="radio" value="timespace" name="viz" checked/>Time Space</span>
 					<span><input type="radio" value="hypertree" name="viz"/>Hypertree</span>
-					<span><input type="radio" value="chord" name="viz" checked/>Chord</span>
+					<span><input type="radio" value="chord" name="viz"/>Chord</span>
 				</form>
 			</div>
 			<div class="options">
@@ -60,7 +60,8 @@ D p13 85..>C p14 95:lost request --color #FF8D00</textarea>
 		</div>
 		<div class="content">
 			<div class="inner">
-				<svg id="paper" width="300" height="300"></svg>
+				<svg id="paper" width="100%" height="100%"></svg>
+				<svg id="chord" width="400" height="400"></svg>
 				<div id="infovis"></div>
 			</div>
 		</div>
