@@ -8,6 +8,61 @@ For a live demo, go to [http://pluxos.github.io/dis-sys-vis/live/index.html](htt
 
 ## Examples
 
+Basic usage:
+
+`B p1 10-->C p2 20:request`
+
+`C p3 30-->B p4 40:response`
+
+<img src="https://cloud.githubusercontent.com/assets/1865566/24639697/e93eed94-18c7-11e7-97f8-7fa1b7574777.png" alt="Basic Usage" />
+
+Many processes:
+
+`B p1 10-->C p2 20:request`
+
+`C p3 30-->B p4 40:response`
+
+`B p5 60-->D p6 80:request`
+
+`D p7 90-->E p8 100:request`
+
+<img src="https://cloud.githubusercontent.com/assets/1865566/24639832/d85c7144-18c8-11e7-85ed-e6974fa70523.png" alt="Many processes" />
+
+Lost request:
+
+`B p1 10-->C p2 20:request`
+
+`B p3 15-->C p4 23:request`
+
+`C p5 25..>B p6 30:lost request`
+
+<img src="https://cloud.githubusercontent.com/assets/1865566/24639885/3960cd3c-18c9-11e7-8555-b08dc0976062.png" alt="Lost request" />
+
+Loopback message:
+
+`B p1 10-->C p2 20:request`
+
+`C p5 5-->C p6 15:loopback`
+
+<img src="https://cloud.githubusercontent.com/assets/1865566/24639941/a334d4ba-18c9-11e7-9ac9-c9b08e0a3956.png" alt="Loopback message" />
+
+Colored messages:
+
+`B p1 10-->C p2 20:request`
+
+`B p3 15-->C p4 23:request`
+
+`C p5 25..>B p6 30:lost request --color #881A1B`
+
+`C p7 40-->D p8 60:response`
+
+`D p9 65-->E p10 68:request `
+
+`D p11 70-->B p12 80:response`
+
+`D p13 85..>C p14 95:lost request --color #FF8D00`
+
+<img src="https://cloud.githubusercontent.com/assets/1865566/24640056/4fdc6c14-18ca-11e7-9d45-9960ef7b2334.png" alt="Colored Messages" />
 
 ## Download and Compilation
 If you would rather run the tool directly from your own box, the following steps should be followed:
