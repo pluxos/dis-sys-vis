@@ -1,4 +1,5 @@
 var SpaceTimeDraw = require('../space-time-draw');
+var ChordDiagram = require('../chorddiagram');
 
 (function() {
 
@@ -24,7 +25,8 @@ var SpaceTimeDraw = require('../space-time-draw');
 	window.controller = {DiagramController: DiagramController};
 	window.view = {
 		SpaceTimeDraw: SpaceTimeDraw,
-		Hypervis: Hypervis
+		Hypervis: Hypervis,
+		ChordDiagram: ChordDiagram
 	};
 
 }());
