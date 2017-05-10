@@ -1,0 +1,12 @@
+CRM p1 5-->SOA p2 10:new adsl con --weight 4
+SOA p3 12-->WF p4 17:create order --weight 3
+WF p5 22..>SOA p6 27:order created --color #00FF00 --weight 3
+WF p7 22-->INV p8 35:register asset
+SOA p9 27..>CRM p10 35:order id --color #00FF00 --weight 4
+WF p11 35-->NET p12 41:alloc asset
+INV p13 35..>WF p14 40:asset reg --color #00FF00
+WF p15 42-->WF p16 50:modify state
+NET p17 45..>WF p18 55:asset allocated --color #00FF00
+WF null 60-->SOA null 67:order completed --weight 3
+SOA null 67--xCRM null 73:end order --color #FF0000 --weight 4
+SOA null 80..>CRM null 85:end order retry --color #00FF00 --weight 4
